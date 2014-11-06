@@ -22,42 +22,49 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.assertNotNull;
 
 /**
- * If there is no MongoDB process available, start one with Flapdoodle.
+ * Handle the setup and teardown of the database.
  */
 public class BaseTest {
 
   private static final Logger LOG = Logger.getLogger(BaseTest.class.getName());
 
+  // Properties of the embedded MongoDB process.
   private static IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
       .defaultsWithLogger(Command.MongoD, LOG) // Log MongoDB's output to the console
       .artifactStore(
           new ArtifactStoreBuilder().defaults(Command.MongoD).executableNaming(new UserTempNaming())) // Give the executable a static name
               .build();
   private static final MongodStarter starter = MongodStarter.getInstance(runtimeConfig);
-  private static MongodExecutable _mongodExe;
+  private static MongodExecutable _mongodExecutable;
   private static MongodProcess _mongod;
 
+  // Persistence classes used in the tests.
   protected Persistence persistence;
   protected GenericPersistence genericPersistence;
 
   static {
-    try {
-      _mongodExe = starter.prepare(new MongodConfigBuilder()
-                                       .version(Version.Main.PRODUCTION).net(new Net(MongoDB.DB_PORT, false)).build());
-    } catch (IOException e) {
+    try (Socket ignored = new Socket("127.0.0.1", MongoDB.DB_PORT)) {
       LOG.fine("Port " + MongoDB.DB_PORT + " is already in use. If you are using a standalone MongoDB Server, this is the intended behavior.");
-      e.printStackTrace();
-    }
-    try {
-      _mongod = _mongodExe.start();
-    } catch (IOException e) {
-      LOG.fine("Could not start the embedded MongoDB process. This should never happen.");
-      e.printStackTrace();
+    } catch (IOException ignored) {
+      try {
+        LOG.info("Trying to start embedded MongoDB.");
+        _mongodExecutable = starter.prepare(new MongodConfigBuilder()
+                                         .version(Version.Main.PRODUCTION)
+                                         .net(new Net(MongoDB.DB_PORT, false)).build());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      try {
+        _mongod = _mongodExecutable.start();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -81,7 +88,5 @@ public class BaseTest {
   @After
   public void tearDown() throws Exception {
     persistence.clearData();
-    //_mongod.stop();
-    //_mongodExe.stop();
   }
 }
