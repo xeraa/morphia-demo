@@ -12,10 +12,8 @@ import de.flapdoodle.embed.process.config.IRuntimeConfig;
 import de.flapdoodle.embed.process.extract.UserTempNaming;
 
 import net.xeraa.morphia_demo.config.MongoDB;
-import net.xeraa.morphia_demo.persistence.GenericPersistence;
 import net.xeraa.morphia_demo.persistence.MongodbGenericPersistence;
 import net.xeraa.morphia_demo.persistence.MongodbPersistence;
-import net.xeraa.morphia_demo.persistence.Persistence;
 
 import org.junit.After;
 import org.junit.Before;
@@ -43,8 +41,8 @@ public class BaseTest {
   private static MongodExecutable _mongodExecutable;
 
   // Persistence classes used in the tests.
-  protected Persistence persistence;
-  protected GenericPersistence genericPersistence;
+  protected MongodbPersistence persistence;
+  protected MongodbGenericPersistence genericPersistence;
 
   /**
    * Check if the MongoDB port is already in use, then there is nothing to do.

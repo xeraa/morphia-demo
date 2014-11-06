@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * The Persistence implementation, showing how to do an upsert, various queries, clearing the
  * database,...
  */
-public class MongodbPersistence implements Persistence {
+public class MongodbPersistence {
 
   private final Datastore mongoDatastore;
 
@@ -27,42 +27,35 @@ public class MongodbPersistence implements Persistence {
     mongoDatastore = MongoDB.instance().getDatabase();
   }
 
-  @Override
   public ObjectId persistCompanyEntity(CompanyEntity company) {
     mongoDatastore.save(company);
     return company.getId();
   }
 
-  @Override
   public ObjectId persistManagerEntity(ManagerEntity manager) {
     mongoDatastore.save(manager);
     return manager.getId();
   }
 
-  @Override
   public ObjectId persistWorkerEntity(WorkerEntity worker) {
     mongoDatastore.save(worker);
     return worker.getId();
   }
 
-  @Override
   public void clearData() {
     mongoDatastore.delete(mongoDatastore.createQuery(CompanyEntity.class));
     mongoDatastore.delete(mongoDatastore.createQuery(ManagerEntity.class));
     mongoDatastore.delete(mongoDatastore.createQuery(WorkerEntity.class));
   }
 
-  @Override
   public List<CompanyEntity> getAllCompanies() {
     return mongoDatastore.createQuery(CompanyEntity.class).asList();
   }
 
-  @Override
   public List<EmployeeEntity> getAllEmployees() {
     return mongoDatastore.createQuery(EmployeeEntity.class).asList();
   }
 
-  @Override
   public List<ManagerEntity> getAllManagers() {
     return mongoDatastore.createQuery(ManagerEntity.class)
 	.disableValidation().field(
@@ -70,7 +63,6 @@ public class MongodbPersistence implements Persistence {
 	.equal(ManagerEntity.class.getName()).asList();
   }
 
-  @Override
   public List<WorkerEntity> getAllWorkers() {
     return mongoDatastore.createQuery(WorkerEntity.class)
 	.disableValidation().field(
@@ -78,7 +70,6 @@ public class MongodbPersistence implements Persistence {
 	.equal(WorkerEntity.class.getName()).asList();
   }
 
-  @Override
   public EmployeeEntity findByEmail(final String email) {
     if ((email == null) || email.isEmpty()) {
       return null;
@@ -87,7 +78,6 @@ public class MongodbPersistence implements Persistence {
     return mongoDatastore.find(EmployeeEntity.class).filter("email", regexp).get();
   }
 
-  @Override
   public List<CompanyEntity> findCompanyByCountry(final String country) {
     if ((country == null) || country.isEmpty()) {
       return new ArrayList<>();
@@ -96,7 +86,6 @@ public class MongodbPersistence implements Persistence {
 	.asList();
   }
 
-  @Override
   public List<EmployeeEntity> findBySalary(final BigDecimal minimum, final BigDecimal maximum) {
 
     /**
@@ -119,7 +108,6 @@ public class MongodbPersistence implements Persistence {
     return query.asList();
   }
 
-  @Override
   public List<EmployeeEntity> findBySalaryFluent(final BigDecimal minimum,
 						 final BigDecimal maximum) {
     if (((minimum != null) && (minimum.compareTo(BigDecimal.ZERO) < 0))
@@ -138,7 +126,6 @@ public class MongodbPersistence implements Persistence {
     return query.asList();
   }
 
-  @Override
   public List<EmployeeEntity> findCompanyEmployees(final String companyName) {
     if ((companyName == null) || companyName.isEmpty()) {
       return new ArrayList<>();
@@ -148,7 +135,6 @@ public class MongodbPersistence implements Persistence {
     return mongoDatastore.find(EmployeeEntity.class).filter("company exists", company).asList();
   }
 
-  @Override
   public void workingFor(EmployeeEntity employee, CompanyEntity company) {
     if (employee.getId() == null) {
       mongoDatastore.save(employee);
