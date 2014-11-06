@@ -19,54 +19,49 @@ public class BankConnectionEntity {
     super();
   }
 
-  public BankConnectionEntity(String name, String accountNumber, String bankCode, String bic,
-			      String iban, String country) {
-    this();
-    this.accountNumber = accountNumber;
-    this.bankCode = bankCode;
-    this.bic = bic;
-    this.iban = iban;
-    this.country = country;
-  }
-
   public String getAccountNumber() {
     return accountNumber;
   }
 
-  public void setAccountNumber(String accountNumber) {
+  public BankConnectionEntity setAccountNumber(String accountNumber) {
     this.accountNumber = accountNumber;
+    return this;
   }
 
   public String getBankCode() {
     return bankCode;
   }
 
-  public void setBankCode(String bankCode) {
+  public BankConnectionEntity setBankCode(String bankCode) {
     this.bankCode = bankCode;
+    return this;
   }
 
   public String getBic() {
     return bic;
   }
 
-  public void setBic(String bic) {
+  public BankConnectionEntity setBic(String bic) {
     this.bic = bic;
+    return this;
   }
 
   public String getIban() {
     return iban;
   }
 
-  public void setIban(String iban) {
+  public BankConnectionEntity setIban(String iban) {
     this.iban = iban;
+    return this;
   }
 
   public String getCountry() {
     return country;
   }
 
-  public void setCountry(String country) {
+  public BankConnectionEntity setCountry(String country) {
     this.country = country;
+    return this;
   }
 
   @Override

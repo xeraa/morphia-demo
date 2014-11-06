@@ -3,13 +3,12 @@ package net.xeraa.morphia_demo.entities;
 import org.mongodb.morphia.annotations.Serialized;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * A concrete EmployeeEntity, showing the difference between object and primitive attributes. Using
  * @Transient.
  */
-public class ManagerEntity extends EmployeeEntity {
+public class ManagerEntity extends EmployeeEntity<ManagerEntity> {
 
   private Boolean approveFunds;
   private boolean approveHires;
@@ -25,37 +24,33 @@ public class ManagerEntity extends EmployeeEntity {
     super();
   }
 
-  public ManagerEntity(String firstname, String surname, List<String> telephone,
-		       List<String> fax, List<String> mobile, String email, BigDecimal salary,
-		       BigDecimal bonus) {
-    super(firstname, surname, telephone, fax, mobile, email, salary);
-    this.setBonus(bonus);
-  }
-
   public BigDecimal getBonus() {
     return bonus;
   }
 
-  public void setBonus(BigDecimal bonus) {
+  public ManagerEntity setBonus(BigDecimal bonus) {
     if (bonus != null) {
       this.bonus = bonus.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+    return this;
   }
 
   public Boolean getApproveFunds() {
     return approveFunds;
   }
 
-  public void setApproveFunds(Boolean approveFunds) {
+  public ManagerEntity setApproveFunds(Boolean approveFunds) {
     this.approveFunds = approveFunds;
+    return this;
   }
 
   public boolean isApproveHires() {
     return approveHires;
   }
 
-  public void setApproveHires(boolean approveHires) {
+  public ManagerEntity setApproveHires(boolean approveHires) {
     this.approveHires = approveHires;
+    return this;
   }
 
   @Override

@@ -3,7 +3,7 @@ package net.xeraa.morphia_demo.test;
 import com.mongodb.DuplicateKeyException;
 
 import net.xeraa.morphia_demo.entities.AddressEntity;
-import net.xeraa.morphia_demo.entities.AddressEntity.AddressType;
+import net.xeraa.morphia_demo.types.AddressType;
 import net.xeraa.morphia_demo.entities.BankConnectionEntity;
 import net.xeraa.morphia_demo.entities.CompanyEntity;
 import net.xeraa.morphia_demo.entities.EmployeeEntity;
@@ -21,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Testing our entities and the MongodbPersistence.
@@ -32,8 +33,8 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void persistCompanyEntity() {
-    CompanyEntity company = new CompanyEntity("Test company", null, null, null,
-					      "http://www.test.com", "foobar@test.com");
+    CompanyEntity company = new CompanyEntity().setName("Test company")
+        .setWeb("http://www.test.com").setEmail("foobar@test.com");
     ObjectId id = persistence.persistCompanyEntity(company);
     assertNotNull("An ObjectId should have been generated when saving the entity", id);
     assertEquals("The return value and actual value of the ObjectId should match",
@@ -45,17 +46,17 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void persistEmployeeEntity() {
-    WorkerEntity worker = new WorkerEntity("Steve", "Jobs", null, null, null,
-					   "steve@apple.com", new BigDecimal("5.25"), 5,
-					   new BigDecimal("10"));
+    WorkerEntity worker = new WorkerEntity().setFirstname("Steve").setSurname("Jobs")
+        .setEmail("steve@apple.com").setSalary(new BigDecimal("5.25")).setYearsExperience(5)
+        .setDailyAllowance(new BigDecimal("10"));
     persistence.persistWorkerEntity(worker);
     EmployeeEntity resultEmployee = persistence.findByEmail("steve@apple.com");
     assertEquals(new BigDecimal("5.25"), resultEmployee.getSalary());
     // Since there is only 1 manager this is fine, but you cannot rely on the order of inserted entities in general
     WorkerEntity resultWorker = persistence.getAllWorkers().get(0);
     assertEquals(new BigDecimal("10.00"), resultWorker.getDailyAllowance());
-    ManagerEntity manager = new ManagerEntity("Mr", "Big", null, null, null, "big@test.com",
-					      new BigDecimal("5000"), new BigDecimal("100000"));
+    ManagerEntity manager = new ManagerEntity().setFirstname("Mr").setSurname("Big")
+    .setEmail("big@test.com").setSalary(new BigDecimal("5000")).setBonus(new BigDecimal("100000"));
     persistence.persistManagerEntity(manager);
     ManagerEntity resultManager = persistence.getAllManagers().get(0);
     assertEquals(new BigDecimal("100000.00"), resultManager.getBonus());
@@ -66,8 +67,7 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void updateCompanyEntity() {
-    CompanyEntity company = new CompanyEntity("Test company", null, null, null,
-					      "http://www.test.com", "foobar@test.com");
+    CompanyEntity company = new CompanyEntity().setName("Test company");
     persistence.persistCompanyEntity(company);
     assertEquals("The value of an entity should match after persisting it", "Test company",
 		 persistence.getAllCompanies().get(0).getName());
@@ -88,11 +88,9 @@ public class PersistenceTest extends BaseTest {
   public void getAllCompanies() {
     assertEquals("Right at the start no companies should be found", 0, persistence
 	.getAllCompanies().size());
-    CompanyEntity company1 = new CompanyEntity("First company", null, null, null,
-					       "http://www.test1.com", "foobar@test1.com");
+    CompanyEntity company1 = new CompanyEntity().setName("First company");
     persistence.persistCompanyEntity(company1);
-    CompanyEntity company2 = new CompanyEntity("Second company", null, null, null,
-					       "http://www.test2.com", "foobar@test2.com");
+    CompanyEntity company2 = new CompanyEntity().setName("Second company");
     persistence.persistCompanyEntity(company2);
     assertEquals("After persisting two companies they should be found", 2, persistence
 	.getAllCompanies().size());
@@ -106,11 +104,11 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void findByEmail() {
-    WorkerEntity worker1 = new WorkerEntity("Philipp", "Krenn", null, null, null,
-					    "pk@test.com", null, 1, null);
+    WorkerEntity worker1 = new WorkerEntity().setFirstname("Philipp").setSurname("Krenn")
+        .setEmail("pk@test.com");
     persistence.persistWorkerEntity(worker1);
-    WorkerEntity worker2 = new WorkerEntity("Jane", "Doe", null, null, null, "jane@test.com",
-					    null, 1, null);
+    WorkerEntity worker2 = new WorkerEntity().setFirstname("Jane").setSurname("Doe")
+        .setEmail("jane@test.com");
     persistence.persistWorkerEntity(worker2);
     assertNull("Null parameter shouldn't find anything", persistence.findByEmail(null));
     assertNull("Empty parameter shouldn't find anything", persistence.findByEmail(""));
@@ -126,14 +124,11 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void findCompanyByCountry() {
-    AddressEntity address = new AddressEntity("Street", "1234", "London", "UK",
-					      AddressType.WORK);
-    BankConnectionEntity bankConnection = new BankConnectionEntity("Account owner",
-								   "1234567890", "11111",
-								   "222222222222", "333333333",
-								   "UK");
-    CompanyEntity company = new CompanyEntity("Test company", null, null, null,
-					      "http://www.test.com", "foobar@test.com");
+    AddressEntity address = new AddressEntity().setStreet("Street").setZip("1234").setCity("London")
+        .setCountry("UK").setAddressType(AddressType.WORK);
+    BankConnectionEntity bankConnection = new BankConnectionEntity().setAccountNumber("1234567890")
+        .setBankCode("11111");
+    CompanyEntity company = new CompanyEntity().setName("Test company");
     company.setAddress(address);
     company.setBankConnection(bankConnection);
     persistence.persistCompanyEntity(company);
@@ -148,11 +143,11 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void findBySalary() {
-    WorkerEntity worker1 = new WorkerEntity("Philipp", "Krenn", null, null, null,
-					    "pk@test.com", new BigDecimal("2500"), 1, null);
+    WorkerEntity worker1 = new WorkerEntity().setFirstname("Philipp").setEmail("pk@test.com")
+        .setSalary(new BigDecimal("2500"));
     persistence.persistWorkerEntity(worker1);
-    WorkerEntity worker2 = new WorkerEntity("Jane", "Doe", null, null, null, "jane@test.com",
-					    new BigDecimal("2800.50"), 2, null);
+    WorkerEntity worker2 = new WorkerEntity().setFirstname("Jane").setEmail("jd@test.com")
+        .setSalary(new BigDecimal("2800.50"));
     persistence.persistWorkerEntity(worker2);
     assertEquals("Invalid lower boundary should return an empty list", 0, persistence
 	.findBySalary(new BigDecimal("-1"), new BigDecimal("100")).size());
@@ -168,7 +163,7 @@ public class PersistenceTest extends BaseTest {
 		 persistence.findBySalary(null, null).size());
     assertEquals("Boundaries with both entries inside", 2,
 		 persistence.findBySalary(new BigDecimal("2000"), new BigDecimal("3000")).size());
-    assertEquals("Testing againg the fluent interface",
+    assertEquals("Testing against the fluent interface",
 		 persistence.findBySalary(new BigDecimal("-1"), new BigDecimal("2600")),
 		 persistence.findBySalaryFluent(new BigDecimal("-1"), new BigDecimal("2600")));
   }
@@ -178,13 +173,10 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void findCompanyEmployees() {
-    WorkerEntity worker1 = new WorkerEntity("Philipp", "Krenn", null, null, null,
-					    "pk@test.com", new BigDecimal("2500"), 1, null);
-    WorkerEntity worker2 = new WorkerEntity("Jane", "Doe", null, null, null, "jane@test.com",
-					    new BigDecimal("2800"), 2, null);
-    ManagerEntity manager = new ManagerEntity("Mr", "Big", null, null, null, "big@test.com",
-					      new BigDecimal("5000"), new BigDecimal("100000"));
-    CompanyEntity company = new CompanyEntity("The company", null, null, null, null, null);
+    WorkerEntity worker1 = new WorkerEntity().setFirstname("Philipp").setEmail("pk@test.com");
+    WorkerEntity worker2 = new WorkerEntity().setFirstname("Jane").setEmail("jd@test.com");
+    ManagerEntity manager = new ManagerEntity().setFirstname("Mr").setSurname("Big");
+    CompanyEntity company = new CompanyEntity().setName("The company");
     persistence.workingFor(worker1, company);
     persistence.persistWorkerEntity(worker2);
     assertEquals("One employee should be working for the company", 1, persistence
@@ -216,21 +208,19 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void uniqueness() {
-    WorkerEntity worker1 = new WorkerEntity("Philipp", "Krenn", null, null, null,
-					    "pk@test.com", null, 1, null);
+    WorkerEntity worker1 = new WorkerEntity().setFirstname("Philipp").setSurname("Krenn")
+        .setEmail("pk@test.com");
     persistence.persistWorkerEntity(worker1);
-    boolean duplicate = false;
     try {
-      WorkerEntity worker2 = new WorkerEntity("Paul", "Kaufmann", null, null, null,
-					      "pk@test.com", null, 1, null);
+      WorkerEntity worker2 = new WorkerEntity().setFirstname("Paul").setSurname("Kaufmann")
+          .setEmail("pk@test.com");
       persistence.persistWorkerEntity(worker2);
+      fail("A duplicate key exception should be thrown");
     } catch (DuplicateKeyException e) {
-      duplicate = true;
     }
     assertEquals(
-	"When adding a second user with the same email address, the first one should be preserved",
-	"Philipp", persistence.getAllEmployees().get(0).getFirstname());
-    assertTrue("A dupliction exception should have been thrown", duplicate);
+        "When adding a second user with the same email address, the first one should be preserved",
+        "Philipp", persistence.getAllEmployees().get(0).getFirstname());
   }
 
   /**
@@ -238,8 +228,7 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void concurrency() {
-    WorkerEntity worker1 = new WorkerEntity("Philipp", "Krenn", null, null, null,
-					    "pk@test.com", null, 1, null);
+    WorkerEntity worker1 = new WorkerEntity().setFirstname("Philipp").setSurname("Krenn");
     persistence.persistWorkerEntity(worker1);
     WorkerEntity worker2 = persistence.getAllWorkers().get(0);
     worker1.setFirstname("Paul");
@@ -261,13 +250,10 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void objectsPrimitives() {
-    ManagerEntity manager1 = new ManagerEntity();
-    manager1.setEmail("foo@test.com");
+    ManagerEntity manager1 = new ManagerEntity().setEmail("foo@test.com");
     persistence.persistManagerEntity(manager1);
-    ManagerEntity manager2 = new ManagerEntity();
-    manager2.setApproveFunds(true);
-    manager2.setApproveHires(true);
-    manager2.setEmail("bar@test.com");
+    ManagerEntity manager2 = new ManagerEntity().setApproveFunds(true).setApproveHires(true)
+        .setEmail("bar@test.com");
     persistence.persistManagerEntity(manager2);
     assertNull("Objects can have null values", persistence.getAllManagers().get(0)
 	.getApproveFunds());

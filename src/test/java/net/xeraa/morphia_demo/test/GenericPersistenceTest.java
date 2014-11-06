@@ -22,14 +22,13 @@ public class GenericPersistenceTest extends BaseTest {
    */
   @Test
   public void persist() {
-    CompanyEntity company = new CompanyEntity("Test company", null, null, null,
-					      "http://www.test.com", "foobar@test.com");
+    CompanyEntity company = new CompanyEntity().setName("Test company");
     ObjectId id1 = genericPersistence.persist(company);
     assertNotNull("An ObjectId should have been generated when saving the entity", id1);
     assertEquals("The return value and actual value of the ObjectId should match",
 		 company.getId(), id1);
-    WorkerEntity worker = new WorkerEntity("firstname", "surname", null, null, null,
-					   "foo@bar.com", new BigDecimal("5.25"), 5, null);
+    WorkerEntity worker = new WorkerEntity().setFirstname("firstname").setSurname("surname")
+        .setEmail("foo@bar.com").setSalary(new BigDecimal("5.25")).setYearsExperience(5);
     ObjectId id2 = genericPersistence.persist(worker);
     assertEquals("The return value and actual value of the ObjectId should match",
 		 worker.getId(), id2);
@@ -44,13 +43,13 @@ public class GenericPersistenceTest extends BaseTest {
 		 genericPersistence.count(CompanyEntity.class));
     assertEquals("In a clean database there should be zero entries", 0,
 		 genericPersistence.count(WorkerEntity.class));
-    CompanyEntity company1 = new CompanyEntity("Test company 1", null, null, null,
-					       "http://www.test1.com", "foobar@test1.com");
+    CompanyEntity company1 = new CompanyEntity().setName("Test company 1")
+        .setWeb("http://www.test1.com").setEmail("foobar@test1.com");
     genericPersistence.persist(company1);
     assertEquals("After adding an entity there should be one entry", 1,
 		 genericPersistence.count(CompanyEntity.class));
-    CompanyEntity company2 = new CompanyEntity("Test company 2", null, null, null,
-					       "http://www.test2.com", "foobar@test2.com");
+    CompanyEntity company2 = new CompanyEntity().setName("Test company 2")
+        .setWeb("http://www.test2.com").setEmail("foobar@test2.com");
     genericPersistence.persist(company2);
     assertEquals("After adding another entity there should be two entries", 2,
 		 genericPersistence.count(CompanyEntity.class));
@@ -65,8 +64,7 @@ public class GenericPersistenceTest extends BaseTest {
   public void getById() {
     assertNull("An invalid ObjectId should return null",
 	       genericPersistence.get(CompanyEntity.class, new ObjectId()));
-    CompanyEntity company = new CompanyEntity("Test company", null, null, null,
-					      "http://www.test.com", "foobar@test.com");
+    CompanyEntity company = new CompanyEntity().setName("Test company");
     ObjectId id = genericPersistence.persist(company);
     assertNotNull("An should be available under the given ObjectId",
 		  genericPersistence.get(CompanyEntity.class, id));

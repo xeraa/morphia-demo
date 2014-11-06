@@ -17,9 +17,10 @@ import java.util.List;
  * The (base) EmployeeEntity, so we don't have to duplicate code for full blown entities. It's using
  * @Indexed, @Indexed(unique=true), @Reference, @Transient, and @Embedded. Additionally making use
  * of @PrePersist and @PostLoad.
+ * The EmployeeType is only required to have chainable setters in subclasses.
  */
 @Entity(value = "employee", noClassnameStored = false)
-public class EmployeeEntity extends BaseEntity {
+public class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEntity {
 
   @Indexed
   private String firstname;
@@ -29,8 +30,6 @@ public class EmployeeEntity extends BaseEntity {
   private String email;
 
   private List<String> telephone = new ArrayList<>();
-  private List<String> fax = new ArrayList<>();
-  private List<String> mobile = new ArrayList<>();
 
   /**
    * You shouldn't use Double for money values, but BigDecimal instead. However, MongoDB doesn't
@@ -53,98 +52,78 @@ public class EmployeeEntity extends BaseEntity {
     super();
   }
 
-  public EmployeeEntity(String firstname, String surname, List<String> telephone,
-			List<String> fax, List<String> mobile, String email, BigDecimal salary) {
-    this();
-    this.firstname = firstname;
-    this.surname = surname;
-    this.telephone = telephone;
-    this.fax = fax;
-    this.mobile = mobile;
-    this.email = email;
-    this.setSalary(salary);
-  }
-
   public String getFirstname() {
     return firstname;
   }
 
-  public void setFirstname(String firstname) {
+  public EmployeeType setFirstname(String firstname) {
     this.firstname = firstname;
+    return (EmployeeType) this;
   }
 
   public String getSurname() {
     return surname;
   }
 
-  public void setSurname(String surname) {
+  public EmployeeType setSurname(String surname) {
     this.surname = surname;
+    return (EmployeeType) this;
   }
 
   public List<String> getTelephone() {
     return telephone;
   }
 
-  public void setTelephone(List<String> telephone) {
+  public EmployeeType setTelephone(List<String> telephone) {
     this.telephone = telephone;
-  }
-
-  public List<String> getFax() {
-    return fax;
-  }
-
-  public void setFax(List<String> fax) {
-    this.fax = fax;
-  }
-
-  public List<String> getMobile() {
-    return mobile;
-  }
-
-  public void setMobile(List<String> mobile) {
-    this.mobile = mobile;
+    return (EmployeeType) this;
   }
 
   public String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
+  public EmployeeType setEmail(String email) {
     this.email = email;
+    return (EmployeeType) this;
   }
 
   public BigDecimal getSalary() {
     return salary;
   }
 
-  public void setSalary(BigDecimal salary) {
+  public EmployeeType setSalary(BigDecimal salary) {
     if (salary != null) {
       this.salary = salary.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+    return (EmployeeType) this;
   }
 
   public CompanyEntity getCompany() {
     return company;
   }
 
-  public void setCompany(CompanyEntity company) {
+  public EmployeeType setCompany(CompanyEntity company) {
     this.company = company;
+    return (EmployeeType) this;
   }
 
   public BankConnectionEntity getBankConnection() {
     return bankConnection;
   }
 
-  public void setBankConnection(BankConnectionEntity bankConnection) {
+  public EmployeeType setBankConnection(BankConnectionEntity bankConnection) {
     this.bankConnection = bankConnection;
+    return (EmployeeType) this;
   }
 
   public AddressEntity getAddress() {
     return address;
   }
 
-  public void setAddress(AddressEntity address) {
+  public EmployeeType setAddress(AddressEntity address) {
     this.address = address;
+    return (EmployeeType) this;
   }
 
   @PrePersist
@@ -186,10 +165,9 @@ public class EmployeeEntity extends BaseEntity {
   @Override
   public String toString() {
     return "EmployeeEntity [id=" + id + ", firstname=" + firstname + ", surname=" + surname
-	   + ", telephone=" + telephone + ", fax=" + fax + ", mobile=" + mobile + ", email="
-	   + email + ", salary=" + salary + ", creationDate=" + creationDate + ", lastChange="
-	   + lastChange + ", company=" + company.getId() + ", bankConnection=" + bankConnection
-	   + ", address=" + address + "]";
+	   + ", telephone=" + telephone + ", email=" + email + ", salary=" + salary +
+           ", creationDate=" + creationDate + ", lastChange=" + lastChange + ", company=" +
+           company.getId() + ", bankConnection=" + bankConnection + ", address=" + address + "]";
   }
 
 }

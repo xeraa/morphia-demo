@@ -5,13 +5,12 @@ import net.xeraa.morphia_demo.persistence.BigDecimalConverter;
 import org.mongodb.morphia.annotations.Converters;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * A concrete EmployeeEntity.
  */
 @Converters({BigDecimalConverter.class})
-public class WorkerEntity extends EmployeeEntity {
+public class WorkerEntity extends EmployeeEntity<WorkerEntity> {
 
   private Integer yearsExperience;
   private BigDecimal dailyAllowance;
@@ -20,30 +19,24 @@ public class WorkerEntity extends EmployeeEntity {
     super();
   }
 
-  public WorkerEntity(String firstname, String surname, List<String> telephone, List<String> fax,
-		      List<String> mobile, String email, BigDecimal salary, Integer yearsExperience,
-		      BigDecimal dailyAllowance) {
-    super(firstname, surname, telephone, fax, mobile, email, salary);
-    this.yearsExperience = yearsExperience;
-    this.setDailyAllowance(dailyAllowance);
-  }
-
   public Integer getYearsExperience() {
     return yearsExperience;
   }
 
-  public void setYearsExperience(Integer yearsExperience) {
+  public WorkerEntity setYearsExperience(Integer yearsExperience) {
     this.yearsExperience = yearsExperience;
+    return this;
   }
 
   public BigDecimal getDailyAllowance() {
     return dailyAllowance;
   }
 
-  public void setDailyAllowance(BigDecimal dailyAllowance) {
+  public WorkerEntity setDailyAllowance(BigDecimal dailyAllowance) {
     if (dailyAllowance != null) {
       this.dailyAllowance = dailyAllowance.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+    return this;
   }
 
   @Override
