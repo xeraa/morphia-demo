@@ -34,8 +34,8 @@ public class BaseTest {
   // Properties of the embedded MongoDB process.
   private static IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
       .defaultsWithLogger(Command.MongoD, LOG) // Log MongoDB's output to the console
-      .artifactStore(
-          new ArtifactStoreBuilder().defaults(Command.MongoD).executableNaming(new UserTempNaming())) // Give the executable a static name
+      .artifactStore(new ArtifactStoreBuilder().defaults(Command.MongoD)
+              .executableNaming(new UserTempNaming())) // Give the executable a static name
               .build();
   private static final MongodStarter starter = MongodStarter.getInstance(runtimeConfig);
   private static MongodExecutable _mongodExecutable;
@@ -49,14 +49,14 @@ public class BaseTest {
    * If it is still available, start an embedded MongoDB process with the Flapdoodle library.
    */
   static {
-    try (Socket ignored = new Socket("127.0.0.1", MongoDB.DB_PORT)) {
-      LOG.fine("Port " + MongoDB.DB_PORT + " is already in use. If you are using a standalone MongoDB Server, this is the intended behavior.");
+    try (Socket ignored = new Socket(MongoDB.DB_HOST, MongoDB.DB_PORT)) {
+      LOG.warning("Port " + MongoDB.DB_PORT + " is already in use. If you are using a standalone MongoDB Server, this is the intended behavior.");
     } catch (IOException ignored) {
       try {
         LOG.info("Trying to start embedded MongoDB.");
-        _mongodExecutable = starter.prepare(new MongodConfigBuilder()
-                                         .version(Version.Main.PRODUCTION)
-                                         .net(new Net(MongoDB.DB_PORT, false)).build());
+        _mongodExecutable = starter.prepare(
+            new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+                .net(new Net(MongoDB.DB_PORT, false)).build());
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -69,9 +69,7 @@ public class BaseTest {
   }
 
   /**
-   * Get our persistence implementation and ensure it's not null. Were not inserting any test data
-   * as there is no dataset we can easily use for all test cases. We need both MongodbPersistence
-   * for clearData() and MongodbGenericPersistence for more specific queries.
+   * Get our persistence implementations and ensure they are not null.
    */
   @Before
   public void setUp() throws Exception {
