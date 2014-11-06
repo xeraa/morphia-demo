@@ -9,12 +9,8 @@ import net.xeraa.morphia_demo.entities.CompanyEntity;
 import net.xeraa.morphia_demo.entities.EmployeeEntity;
 import net.xeraa.morphia_demo.entities.ManagerEntity;
 import net.xeraa.morphia_demo.entities.WorkerEntity;
-import net.xeraa.morphia_demo.persistence.MongodbPersistence;
-import net.xeraa.morphia_demo.persistence.Persistence;
 
 import org.bson.types.ObjectId;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -30,29 +26,6 @@ import static org.junit.Assert.assertTrue;
  * Testing our entities and the MongodbPersistence.
  */
 public class PersistenceTest extends BaseTest {
-
-  private Persistence persistence;
-
-  /**
-   * Get our persistence implementation and ensure it's not null. Were not inserting any test data
-   * as there is no dataset we can easily use for all test cases.
-   */
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
-    persistence = new MongodbPersistence();
-    assertNotNull(persistence);
-  }
-
-  /**
-   * After finishing the test, clean up the database. This is important to allow multiple test runs
-   * in combination with unique key constraints.
-   */
-  @After
-  public void tearDown() throws Exception {
-    persistence.clearData();
-    super.tearDown();
-  }
 
   /**
    * Ensure a company is saved and the ObjectId is generated correctly.
