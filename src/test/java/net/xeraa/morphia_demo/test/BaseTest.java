@@ -2,7 +2,6 @@ package net.xeraa.morphia_demo.test;
 
 import de.flapdoodle.embed.mongo.Command;
 import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.ArtifactStoreBuilder;
 import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
@@ -42,12 +41,15 @@ public class BaseTest {
               .build();
   private static final MongodStarter starter = MongodStarter.getInstance(runtimeConfig);
   private static MongodExecutable _mongodExecutable;
-  private static MongodProcess _mongod;
 
   // Persistence classes used in the tests.
   protected Persistence persistence;
   protected GenericPersistence genericPersistence;
 
+  /**
+   * Check if the MongoDB port is already in use, then there is nothing to do.
+   * If it is still available, start an embedded MongoDB process with the Flapdoodle library.
+   */
   static {
     try (Socket ignored = new Socket("127.0.0.1", MongoDB.DB_PORT)) {
       LOG.fine("Port " + MongoDB.DB_PORT + " is already in use. If you are using a standalone MongoDB Server, this is the intended behavior.");
@@ -61,7 +63,7 @@ public class BaseTest {
         e.printStackTrace();
       }
       try {
-        _mongod = _mongodExecutable.start();
+        _mongodExecutable.start();
       } catch (IOException e) {
         e.printStackTrace();
       }
