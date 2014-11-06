@@ -1,6 +1,6 @@
 package net.xeraa.morphia_demo.test;
 
-import com.mongodb.MongoException.DuplicateKey;
+import com.mongodb.DuplicateKeyException;
 
 import net.xeraa.morphia_demo.entities.AddressEntity;
 import net.xeraa.morphia_demo.entities.AddressEntity.AddressType;
@@ -224,7 +224,7 @@ public class PersistenceTest extends BaseTest {
       WorkerEntity worker2 = new WorkerEntity("Paul", "Kaufmann", null, null, null,
 					      "pk@test.com", null, 1, null);
       persistence.persistWorkerEntity(worker2);
-    } catch (DuplicateKey e) {
+    } catch (DuplicateKeyException e) {
       duplicate = true;
     }
     assertEquals(
