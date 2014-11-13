@@ -37,16 +37,16 @@ public class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEn
    * both here and in the persistence.
    */
   @Transient
-  private BigDecimal salary;
-  private String salaryString;
+  protected BigDecimal salary;
+  protected String salaryString;
 
   @Reference
-  private CompanyEntity company;
+  protected CompanyEntity company;
 
   @Embedded
-  private BankConnectionEntity bankConnection;
+  protected BankConnectionEntity bankConnection;
   @Embedded
-  private AddressEntity address;
+  protected AddressEntity address;
 
   public EmployeeEntity() {
     super();

@@ -9,25 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The CompanyEntity, using @Indexed(unique=true), @Reference (list), and @Embedded.
+ * The CompanyEntity, using @Indexed, @Reference (list), and @Embedded.
  */
 @Entity(value = "company", noClassnameStored = true)
 public class CompanyEntity extends BaseEntity {
 
-  @Indexed(unique = true)
-  private String name;
+  @Indexed
+  protected String name;
 
-  private List<String> telephone = new ArrayList<>();
-  private String email;
-  private String web;
+  protected List<String> telephone = new ArrayList<>();
+
+  protected String email;
+
+  protected String web;
 
   @Reference
-  private List<EmployeeEntity> employees = new ArrayList<>();
+  protected List<EmployeeEntity> employees = new ArrayList<>();
 
   @Embedded
-  private BankConnectionEntity bankConnection;
+  protected BankConnectionEntity bankConnection;
   @Embedded
-  private AddressEntity address;
+  protected AddressEntity address;
 
   public CompanyEntity() {
     super();

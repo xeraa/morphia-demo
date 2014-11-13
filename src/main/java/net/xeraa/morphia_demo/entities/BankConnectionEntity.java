@@ -9,11 +9,15 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class BankConnectionEntity {
 
-  private String accountNumber;
-  private String bankCode;
-  private String bic;
-  private String iban;
-  private String country;
+  protected String accountNumber;
+
+  protected String bankCode;
+
+  protected String bic;
+
+  protected String iban;
+
+  protected String country;
 
   public BankConnectionEntity() {
     super();

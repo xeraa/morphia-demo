@@ -12,8 +12,9 @@ import java.math.BigDecimal;
 @Converters({BigDecimalConverter.class})
 public class WorkerEntity extends EmployeeEntity<WorkerEntity> {
 
-  private Integer yearsExperience;
-  private BigDecimal dailyAllowance;
+  protected Integer yearsExperience;
+
+  protected BigDecimal dailyAllowance;
 
   public WorkerEntity() {
     super();

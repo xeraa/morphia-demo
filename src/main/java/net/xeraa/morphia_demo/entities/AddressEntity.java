@@ -11,11 +11,15 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class AddressEntity {
 
-  private String street;
-  private String zip;
-  private String city;
-  private String country;
-  private AddressType addressType;
+  protected String street;
+
+  protected String zip;
+
+  protected String city;
+
+  protected String country;
+
+  protected AddressType addressType;
 
   public AddressEntity() {
     super();
