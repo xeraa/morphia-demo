@@ -6,14 +6,16 @@ version = '1.0-SNAPSHOT'
 description = """Morphia Demo"""
 
 sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
     mavenLocal()
 }
 dependencies {
-    compile group: 'org.mongodb', name: 'mongo-java-driver', version:'2.12.4'
-    compile group: 'org.mongodb.morphia', name: 'morphia', version:'0.108'
-    testCompile group: 'junit', name: 'junit', version:'4.11'
-    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '1.46.1'
+    compile 'org.mongodb:mongo-java-driver:2.12.4',
+            'org.mongodb.morphia:morphia:0.108',
+            'org.springframework.security:spring-security-config:3.2.5.RELEASE' // Encryption and hashing
+    testCompile 'junit:junit:4.11',
+                'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.46.1' // Embedded MongoDB
 }
