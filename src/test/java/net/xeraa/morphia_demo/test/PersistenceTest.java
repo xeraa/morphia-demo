@@ -252,15 +252,16 @@ public class PersistenceTest extends BaseTest {
   public void objectsPrimitives() {
     ManagerEntity manager1 = new ManagerEntity().setEmail("foo@test.com");
     persistence.persistManagerEntity(manager1);
-    ManagerEntity manager2 = new ManagerEntity().setApproveFunds(true).setApproveHires(true)
+    ManagerEntity manager2 = new ManagerEntity().setApproveFunds(true).setManagerCanApproveHires(
+        true)
         .setEmail("bar@test.com");
     persistence.persistManagerEntity(manager2);
     assertNull("Objects can have null values", persistence.getAllManagers().get(0)
 	.getApproveFunds());
     assertNotNull("Primitives can't have null values (always added to the database)",
-		  persistence.getAllManagers().get(0).isApproveHires());
+		  persistence.getAllManagers().get(0).isManagerCanApproveHires());
     assertFalse("Primitives can't have null values (initialized to false)", persistence
-	.getAllManagers().get(0).isApproveHires());
+	.getAllManagers().get(0).isManagerCanApproveHires());
   }
 
 }

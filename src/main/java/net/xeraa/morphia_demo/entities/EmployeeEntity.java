@@ -1,9 +1,12 @@
 package net.xeraa.morphia_demo.entities;
 
 
+import org.mongodb.morphia.annotations.AlsoLoad;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexed;
+import org.mongodb.morphia.annotations.Indexes;
 import org.mongodb.morphia.annotations.PostLoad;
 import org.mongodb.morphia.annotations.PrePersist;
 import org.mongodb.morphia.annotations.Reference;
@@ -20,16 +23,23 @@ import java.util.List;
  * The EmployeeType is only required to have chainable setters in subclasses.
  */
 @Entity(value = "employee", noClassnameStored = false)
+@Indexes(@Index(name = "name", value = "surname, firstname"))
 public class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEntity {
 
-  @Indexed
-  private String firstname;
-  @Indexed
-  private String surname;
-  @Indexed(unique = true)
-  private String email;
+  protected String firstname;
 
-  private List<String> telephone = new ArrayList<>();
+  @AlsoLoad("lastname")
+  protected String surname;
+
+  @Indexed(unique = true)
+  protected String email;
+
+  @Transient
+  protected String secret;
+  @Embedded
+  protected EncryptionEntity secretEncrypted;
+
+  protected List<String> telephone = new ArrayList<>();
 
   /**
    * You shouldn't use Double for money values, but BigDecimal instead. However, MongoDB doesn't

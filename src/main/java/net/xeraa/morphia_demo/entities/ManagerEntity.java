@@ -1,5 +1,6 @@
 package net.xeraa.morphia_demo.entities;
 
+import org.mongodb.morphia.annotations.Property;
 import org.mongodb.morphia.annotations.Serialized;
 
 import java.math.BigDecimal;
@@ -10,15 +11,17 @@ import java.math.BigDecimal;
  */
 public class ManagerEntity extends EmployeeEntity<ManagerEntity> {
 
-  private Boolean approveFunds;
-  private boolean approveHires;
+  protected Boolean approveFunds;
+
+  @Property("hire")
+  protected boolean managerCanApproveHires;
 
   /**
    * You shouldn't use Double for money values, but BigDecimal instead. However, MongoDB doesn't
    * natively support that (yet), so we'll serialize the value in Java - done transparently.
    */
   @Serialized
-  private BigDecimal bonus;
+  protected BigDecimal bonus;
 
   public ManagerEntity() {
     super();
@@ -44,12 +47,12 @@ public class ManagerEntity extends EmployeeEntity<ManagerEntity> {
     return this;
   }
 
-  public boolean isApproveHires() {
-    return approveHires;
+  public boolean isManagerCanApproveHires() {
+    return managerCanApproveHires;
   }
 
-  public ManagerEntity setApproveHires(boolean approveHires) {
-    this.approveHires = approveHires;
+  public ManagerEntity setManagerCanApproveHires(boolean managerCanApproveHires) {
+    this.managerCanApproveHires = managerCanApproveHires;
     return this;
   }
 
