@@ -31,7 +31,7 @@ public class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEn
   @AlsoLoad("lastname")
   protected String surname;
 
-  @Indexed(unique = true)
+  @Indexed(unique = true, sparse = false)
   protected String email;
 
   @Transient
@@ -55,6 +55,7 @@ public class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEn
 
   @Embedded
   protected BankConnectionEntity bankConnection;
+
   @Embedded
   protected AddressEntity address;
 
