@@ -18,13 +18,13 @@ import java.util.List;
 
 /**
  * The (base) EmployeeEntity, so we don't have to duplicate code for full blown entities. It's using
- * @Indexed, @Indexed(unique=true), @Reference, @Transient, and @Embedded. Additionally making use
+ * @Indexes, @Indexed(unique=true), @Reference, @Transient, and @Embedded. Additionally making use
  * of @PrePersist and @PostLoad.
  * The EmployeeType is only required to have chainable setters in subclasses.
  */
 @Entity(value = "employee", noClassnameStored = false)
 @Indexes(@Index(name = "name", value = "surname, firstname"))
-public class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEntity {
+public abstract class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEntity {
 
   protected String firstname;
 
