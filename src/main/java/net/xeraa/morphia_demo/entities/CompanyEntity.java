@@ -28,6 +28,7 @@ public class CompanyEntity extends BaseEntity {
 
   @Embedded
   protected BankConnectionEntity bankConnection;
+
   @Embedded
   protected AddressEntity address;
 
