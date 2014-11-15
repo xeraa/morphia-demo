@@ -41,6 +41,8 @@ public abstract class EmployeeEntity <EmployeeType extends EmployeeEntity> exten
 
   protected List<String> telephone = new ArrayList<>();
 
+  protected Long employeeNumber;
+
   /**
    * You shouldn't use Double for money values, but BigDecimal instead. However, MongoDB doesn't
    * natively support that (yet), so we'll use Strings in MongoDB. Be careful with the conversions,
@@ -134,6 +136,15 @@ public abstract class EmployeeEntity <EmployeeType extends EmployeeEntity> exten
 
   public EmployeeType setAddress(AddressEntity address) {
     this.address = address;
+    return (EmployeeType) this;
+  }
+
+  public Long getEmployeeNumber() {
+    return employeeNumber;
+  }
+
+  public EmployeeType setEmployeeNumber(Long employeeNumber) {
+    this.employeeNumber = employeeNumber;
     return (EmployeeType) this;
   }
 
