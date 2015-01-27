@@ -3,18 +3,19 @@ package net.xeraa.morphia_demo.test;
 import com.mongodb.DuplicateKeyException;
 
 import net.xeraa.morphia_demo.entities.AddressEntity;
-import net.xeraa.morphia_demo.types.AddressType;
 import net.xeraa.morphia_demo.entities.BankConnectionEntity;
 import net.xeraa.morphia_demo.entities.CompanyEntity;
 import net.xeraa.morphia_demo.entities.EmployeeEntity;
 import net.xeraa.morphia_demo.entities.ManagerEntity;
 import net.xeraa.morphia_demo.entities.WorkerEntity;
+import net.xeraa.morphia_demo.types.AddressType;
 
 import org.bson.types.ObjectId;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -33,8 +34,7 @@ public class PersistenceTest extends BaseTest {
    */
   @Test
   public void persistCompanyEntity() {
-    CompanyEntity company = new CompanyEntity().setName("Test company")
-        .setWeb("http://www.test.com").setEmail("foobar@test.com");
+    CompanyEntity company = new CompanyEntity().setName("Test company");
     ObjectId id = persistence.persistCompanyEntity(company);
     assertNotNull("An ObjectId should have been generated when saving the entity", id);
     assertEquals("The return value and actual value of the ObjectId should match",
@@ -47,19 +47,21 @@ public class PersistenceTest extends BaseTest {
   @Test
   public void persistEmployeeEntity() {
     WorkerEntity worker = new WorkerEntity().setFirstname("Steve").setSurname("Jobs")
-        .setEmail("steve@apple.com").setSalary(new BigDecimal("5.25")).setYearsExperience(5)
-        .setDailyAllowance(new BigDecimal("10"));
+        .setEmail("steve@apple.com");
     persistence.persistWorkerEntity(worker);
     EmployeeEntity resultEmployee = persistence.findByEmail("steve@apple.com");
-    assertEquals(new BigDecimal("5.25"), resultEmployee.getSalary());
-    // Since there is only 1 manager this is fine, but you cannot rely on the order of inserted entities in general
+    assertEquals("Steve", resultEmployee.getFirstname());
+
+    // Since there is only 1 manager this is fine, but you cannot rely on the order of inserted
+    // entities in general.
     WorkerEntity resultWorker = persistence.getAllWorkers().get(0);
     assertEquals(new BigDecimal("10.00"), resultWorker.getDailyAllowance());
     ManagerEntity manager = new ManagerEntity().setFirstname("Mr").setSurname("Big")
     .setEmail("big@test.com").setSalary(new BigDecimal("5000")).setBonus(new BigDecimal("100000"));
     persistence.persistManagerEntity(manager);
-    ManagerEntity resultManager = persistence.getAllManagers().get(0);
-    assertEquals(new BigDecimal("100000.00"), resultManager.getBonus());
+    List<ManagerEntity> resultManagers = persistence.getAllManagers();
+    assertEquals(1, resultManagers.size());
+    assertEquals(new BigDecimal("100000.00"), resultManagers.get(0).getBonus());
   }
 
   /**
