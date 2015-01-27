@@ -10,7 +10,7 @@ This is a simple test project I use to show some Morphia features.
 *   JDK 7+
 *   Gradle
 
-You can either use a standalone MongoDB server and if that is not available on the default port 27017,
+You can either use a standalone MongoDB server on *localhost:27017* or if that is not available,
 the test code will start an embedded MongoDB process.
 
 
