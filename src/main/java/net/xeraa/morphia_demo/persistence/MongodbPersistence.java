@@ -58,22 +58,23 @@ public class MongodbPersistence {
 
   public List<ManagerEntity> getAllManagers() {
     return mongoDatastore.createQuery(ManagerEntity.class)
-	.disableValidation().field(
-	    "className") // Querying an implicit attribute you to disable validation
-	.equal(ManagerEntity.class.getName()).asList();
+	// Disable validation when querying an implicit attribute to avoid warnings
+	.disableValidation()
+	.field("className").equal(ManagerEntity.class.getName()).asList();
   }
 
   public List<WorkerEntity> getAllWorkers() {
     return mongoDatastore.createQuery(WorkerEntity.class)
-	.disableValidation().field(
-	    "className") // Querying an implicit attribute you to disable validation
-	.equal(WorkerEntity.class.getName()).asList();
+	// Disable validation when querying an implicit attribute to avoid warnings
+	.disableValidation()
+	.field("className").equal(WorkerEntity.class.getName()).asList();
   }
 
   public EmployeeEntity findByEmail(final String email) {
     if ((email == null) || email.isEmpty()) {
       return null;
     }
+    // Don't do this in production, this is slow
     Pattern regexp = Pattern.compile("^" + email + "$", Pattern.CASE_INSENSITIVE);
     return mongoDatastore.find(EmployeeEntity.class).filter("email", regexp).get();
   }

@@ -47,7 +47,7 @@ public class PersistenceTest extends BaseTest {
   @Test
   public void persistEmployeeEntity() {
     WorkerEntity worker = new WorkerEntity().setFirstname("Steve").setSurname("Jobs")
-        .setEmail("steve@apple.com");
+        .setEmail("steve@apple.com").setDailyAllowance(new BigDecimal("10.00"));
     persistence.persistWorkerEntity(worker);
     EmployeeEntity resultEmployee = persistence.findByEmail("steve@apple.com");
     assertEquals("Steve", resultEmployee.getFirstname());
@@ -56,6 +56,7 @@ public class PersistenceTest extends BaseTest {
     // entities in general.
     WorkerEntity resultWorker = persistence.getAllWorkers().get(0);
     assertEquals(new BigDecimal("10.00"), resultWorker.getDailyAllowance());
+
     ManagerEntity manager = new ManagerEntity().setFirstname("Mr").setSurname("Big")
     .setEmail("big@test.com").setSalary(new BigDecimal("5000")).setBonus(new BigDecimal("100000"));
     persistence.persistManagerEntity(manager);
