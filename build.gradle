@@ -13,8 +13,8 @@ repositories {
     mavenLocal()
 }
 dependencies {
-    compile 'org.mongodb:mongo-java-driver:2.12.5',
-            'org.mongodb.morphia:morphia:0.109',
+    compile 'org.mongodb:mongo-java-driver:2.13.0',
+            'org.mongodb.morphia:morphia:0.110',
             'org.springframework.security:spring-security-config:3.2.5.RELEASE' // Encryption and hashing
     testCompile 'junit:junit:4.12',
                 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.46.4' // Embedded MongoDB
