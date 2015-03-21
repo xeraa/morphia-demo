@@ -1,21 +1,23 @@
-apply plugin: 'java'
-
 group = 'net.xeraa'
 version = '1.0-SNAPSHOT'
-
 description = """Morphia Demo"""
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
+
 }
 dependencies {
     compile 'org.mongodb:mongo-java-driver:3.0.0-rc0',
             'org.mongodb.morphia:morphia:0.110',
-            'org.springframework.security:spring-security-config:3.2.5.RELEASE' // Encryption and hashing
+            'org.springframework.security:spring-security-config:3.2.6.RELEASE' // Encryption and hashing
     testCompile 'junit:junit:4.12',
-                'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.46.4' // Embedded MongoDB
+                'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.47.0' // Embedded MongoDB
 }
