@@ -13,7 +13,7 @@ repositories {
     mavenLocal()
 }
 dependencies {
-    compile 'org.mongodb:mongo-java-driver:2.13.0',
+    compile 'org.mongodb:mongo-java-driver:3.0.0-rc0',
             'org.mongodb.morphia:morphia:0.110',
             'org.springframework.security:spring-security-config:3.2.5.RELEASE' // Encryption and hashing
     testCompile 'junit:junit:4.12',

@@ -37,11 +37,7 @@ public class MongoDB {
 	.readPreference(ReadPreference.primaryPreferred()) // Read from the primary, if not available use a secondary
 	.build();
     MongoClient mongoClient;
-    try {
-      mongoClient = new MongoClient(new ServerAddress(DB_HOST, DB_PORT), mongoOptions);
-    } catch (UnknownHostException e) {
-      throw new RuntimeException("Error initializing MongoDB", e);
-    }
+    mongoClient = new MongoClient(new ServerAddress(DB_HOST, DB_PORT), mongoOptions);
 
     mongoClient.setWriteConcern(WriteConcern.SAFE);
     datastore = new Morphia().mapPackage(BaseEntity.class.getPackage().getName())
