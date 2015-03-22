@@ -3,8 +3,6 @@ version = '1.0-SNAPSHOT'
 description = """Morphia Demo"""
 
 apply plugin: 'java'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
