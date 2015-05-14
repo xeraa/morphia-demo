@@ -131,9 +131,13 @@ public class MongodbPersistence {
     if ((companyName == null) || companyName.isEmpty()) {
       return new ArrayList<>();
     }
-    CompanyEntity company = mongoDatastore.find(CompanyEntity.class).field("name")
-	.equal(companyName).get();
-    return mongoDatastore.find(EmployeeEntity.class).filter("company exists", company).asList();
+    CompanyEntity company = mongoDatastore.find(CompanyEntity.class).field("name").equal(companyName).get();
+
+    if(company == null){
+      return new ArrayList<>();
+    }
+    return mongoDatastore.find(EmployeeEntity.class).field("company").equal(mongoDatastore.getKey(company))
+            .asList();
   }
 
   public void workingFor(EmployeeEntity employee, CompanyEntity company) {
