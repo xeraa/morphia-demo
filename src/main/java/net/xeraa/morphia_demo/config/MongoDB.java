@@ -5,13 +5,10 @@ import com.mongodb.MongoClientOptions;
 import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteConcern;
-
 import net.xeraa.morphia_demo.entities.BaseEntity;
-
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
-import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
 /**
