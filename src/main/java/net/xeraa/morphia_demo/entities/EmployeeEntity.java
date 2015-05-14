@@ -4,6 +4,7 @@ package net.xeraa.morphia_demo.entities;
 import org.mongodb.morphia.annotations.AlsoLoad;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Field;
 import org.mongodb.morphia.annotations.Index;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Indexes;
@@ -23,7 +24,7 @@ import java.util.List;
  * The EmployeeType is only required to have chainable setters in subclasses.
  */
 @Entity(value = "employee", noClassnameStored = false)
-@Indexes(@Index(name = "name", value = "surname, firstname"))
+@Indexes(@Index(name = "name", fields = { @Field(value = "surname"), @Field(value = "firstname") }))
 public abstract class EmployeeEntity <EmployeeType extends EmployeeEntity> extends BaseEntity {
 
   protected String firstname;
