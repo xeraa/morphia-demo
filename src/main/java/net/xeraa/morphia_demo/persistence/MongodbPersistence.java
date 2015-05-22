@@ -53,18 +53,18 @@ public class MongodbPersistence {
   }
 
   public List<EmployeeEntity> getAllEmployees() {
-    return mongoDatastore.createQuery(EmployeeEntity.class).asList();
+    return mongoDatastore.find(EmployeeEntity.class).asList();
   }
 
   public List<ManagerEntity> getAllManagers() {
-    return mongoDatastore.createQuery(ManagerEntity.class)
+    return mongoDatastore.find(ManagerEntity.class)
 	// Disable validation when querying an implicit attribute to avoid warnings
 	.disableValidation()
 	.field("className").equal(ManagerEntity.class.getName()).asList();
   }
 
   public List<WorkerEntity> getAllWorkers() {
-    return mongoDatastore.createQuery(WorkerEntity.class)
+    return mongoDatastore.find(WorkerEntity.class)
 	// Disable validation when querying an implicit attribute to avoid warnings
 	.disableValidation()
 	.field("className").equal(WorkerEntity.class.getName()).asList();
