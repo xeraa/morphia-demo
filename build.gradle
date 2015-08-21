@@ -13,9 +13,9 @@ repositories {
 
 }
 dependencies {
-    compile 'org.mongodb:mongo-java-driver:3.0.2',
-            'org.mongodb.morphia:morphia:1.0.0',
-            'org.springframework.security:spring-security-config:4.0.1.RELEASE' // Encryption and hashing
+    compile 'org.mongodb:mongo-java-driver:3.0.3',
+            'org.mongodb.morphia:morphia:1.0.1',
+            'org.springframework.security:spring-security-config:4.0.2.RELEASE' // Encryption and hashing
     testCompile 'junit:junit:4.12',
-                'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.47.3' // Embedded MongoDB
+                'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.50.0' // Embedded MongoDB
 }
