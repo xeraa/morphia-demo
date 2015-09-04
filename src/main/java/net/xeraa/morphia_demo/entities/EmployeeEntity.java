@@ -187,10 +187,11 @@ public abstract class EmployeeEntity <EmployeeType extends EmployeeEntity> exten
 
   @Override
   public String toString() {
+    String companyId = (company == null) ? "none" : company.getId().toString();
     return "EmployeeEntity [id=" + id + ", firstname=" + firstname + ", surname=" + surname
 	   + ", telephone=" + telephone + ", email=" + email + ", salary=" + salary +
            ", creationDate=" + creationDate + ", lastChange=" + lastChange + ", company=" +
-           company.getId() + ", bankConnection=" + bankConnection + ", address=" + address + "]";
+           companyId + ", bankConnection=" + bankConnection + ", address=" + address + "]";
   }
 
 }
