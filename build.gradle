@@ -3,6 +3,7 @@ version = '1.0-SNAPSHOT'
 description = """Morphia Demo"""
 
 apply plugin: 'java'
+apply plugin: 'eclipse'
 compileJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
